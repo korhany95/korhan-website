@@ -146,10 +146,14 @@ function splitFrameIndices() {
 const loaderVideo = document.getElementById('loaderVideo')
 const heroChars = []
 
-// Keep the logo video on screen at least this long so it registers,
-// even when everything is already cached. (The video itself is 5s and
+// Keep the intro video on screen at least this long so it registers,
+// even when everything is already cached. (The video itself is ~2.6s and
 // freezes on its final frame if the network is slower than that.)
-const LOADER_MIN_MS = 3200
+const LOADER_MIN_MS = 2600
+
+// Never hold the reveal hostage waiting for the video (autoplay blocked,
+// stalled download, etc.) — past this point we wipe regardless.
+const LOADER_MAX_MS = 4000
 
 // Returning visitors (e.g. navigating back from a gallery page) have the
 // frames cached and have already seen the brand moment — skip the video
@@ -212,11 +216,24 @@ async function boot() {
   // redraws only if it improves the frame currently on screen.
   preloadFrames(rest, 6, () => drawFrame(frameState.index))
 
-  // Give the brand video its moment (skipped for reduced motion / returns)
+  // Give the brand video its moment (skipped for reduced motion / returns):
+  // wait for it to finish playing, but never past LOADER_MAX_MS total.
   if (!prefersReducedMotion && !RETURNING) {
     const elapsed = performance.now() - bootStart
     if (elapsed < LOADER_MIN_MS) {
       await new Promise((r) => setTimeout(r, LOADER_MIN_MS - elapsed))
+    }
+    if (loaderVideo && !loaderVideo.ended && !loaderVideo.paused) {
+      await new Promise((resolve) => {
+        const budget = LOADER_MAX_MS - (performance.now() - bootStart)
+        if (budget <= 0) return resolve()
+        const timer = setTimeout(resolve, budget)
+        loaderVideo.addEventListener(
+          'ended',
+          () => { clearTimeout(timer); resolve() },
+          { once: true }
+        )
+      })
     }
   }
 

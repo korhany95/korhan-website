@@ -12,7 +12,7 @@ dist
 *.mkv
 
 # ...but the compressed loader video must ship with the site
-!public/tyc-logo.mp4
+!public/intro.mp4
 
 # Original photos/videos stay local-only — the site serves the
 # web-optimized copies from public/media instead.

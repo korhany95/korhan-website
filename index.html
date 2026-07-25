@@ -20,6 +20,8 @@
       html { background: #070708; color-scheme: dark; }
       body { visibility: hidden; }
     </style>
+    <!-- The loader video must start instantly — fetch it ahead of everything -->
+    <link rel="preload" as="video" href="/intro.mp4" fetchpriority="high" />
     <!-- Kick off the first background frame before the JS bundle parses -->
     <link
       rel="preload"
@@ -54,7 +56,7 @@
       <video
         class="loader__video"
         id="loaderVideo"
-        src="/tyc-logo.mp4"
+        src="/intro.mp4"
         muted
         autoplay
         playsinline

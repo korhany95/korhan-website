@@ -20,6 +20,21 @@
       html { background: #070708; color-scheme: dark; }
       body { visibility: hidden; }
     </style>
+    <!-- Kick off the first background frame before the JS bundle parses -->
+    <link
+      rel="preload"
+      as="image"
+      href="/frames/desktop/frame_0001.webp"
+      media="(min-width: 761px)"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/frames/mobile/frame_0001.webp"
+      media="(max-width: 760px)"
+      fetchpriority="high"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

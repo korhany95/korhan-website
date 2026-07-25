@@ -16,5 +16,5 @@ dist
 
 # Original photos/videos stay local-only — the site serves the
 # web-optimized copies from public/media instead.
-public/Website Resimleri ve Videoları/
+Website Resimleri ve Videoları/
 !public/media/**/*.mp4

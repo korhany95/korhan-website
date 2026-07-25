@@ -15,7 +15,6 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import { FRAME_CONFIG, buildFrameUrls } from './config.js'
-import { createParticles } from './particles.js'
 import { initCursor } from './cursor.js'
 import { splitChars, splitWords } from './split.js'
 import { initLightboxZoom } from './lightbox-zoom.js'
@@ -62,11 +61,28 @@ function setCanvasSize() {
   drawFrame(frameState.index)
 }
 
+function isLoaded(img) {
+  return !!img && img.complete && img.naturalWidth > 0
+}
+
+// While the background fill is still streaming, fall back to the closest
+// frame that has arrived so the scrub never shows a blank canvas.
+function nearestLoadedIndex(want) {
+  if (isLoaded(images[want])) return want
+  for (let d = 1; d < images.length; d++) {
+    const lo = want - d
+    const hi = want + d
+    if (lo >= 0 && isLoaded(images[lo])) return lo
+    if (hi < images.length && isLoaded(images[hi])) return hi
+  }
+  return -1
+}
+
 function drawFrame(index) {
-  const i = Math.max(0, Math.min(images.length - 1, Math.round(index)))
+  const want = Math.max(0, Math.min(images.length - 1, Math.round(index)))
+  const i = nearestLoadedIndex(want)
+  if (i < 0 || i === lastDrawn) return
   const img = images[i]
-  if (!img || !img.complete || img.naturalWidth === 0) return
-  if (i === lastDrawn) return
   lastDrawn = i
 
   const cw = window.innerWidth
@@ -94,20 +110,34 @@ function loadImage(url, index) {
   })
 }
 
-async function preloadFrames(onProgress) {
+async function preloadFrames(indices, concurrency, onProgress) {
   let loaded = 0
-  const total = frameUrls.length
-  const CONCURRENCY = 12
+  const total = indices.length
   let cursor = 0
   async function worker() {
     while (cursor < total) {
-      const i = cursor++
+      const i = indices[cursor++]
       await loadImage(frameUrls[i], i)
       loaded++
-      onProgress(loaded / total)
+      if (onProgress) onProgress(loaded / total)
     }
   }
-  await Promise.all(Array.from({ length: Math.min(CONCURRENCY, total) }, worker))
+  await Promise.all(Array.from({ length: Math.min(concurrency, total) }, worker))
+}
+
+// The reveal only waits for a sparse keyframe set (~1/8 of the sequence);
+// the rest streams in behind the page. Nearest-frame fallback in drawFrame
+// covers the gaps until the fill finishes.
+const KEYFRAME_STRIDE = 8
+
+function splitFrameIndices() {
+  const key = []
+  const rest = []
+  for (let i = 0; i < frameUrls.length; i++) {
+    if (i % KEYFRAME_STRIDE === 0 || i === frameUrls.length - 1) key.push(i)
+    else rest.push(i)
+  }
+  return { key, rest }
 }
 
 /* -------------------------------------------------------------------------
@@ -172,10 +202,15 @@ async function boot() {
   }
   gsap.ticker.add(renderProgress)
 
-  await preloadFrames((p) => { progress.real = p })
+  const { key, rest } = splitFrameIndices()
+  await preloadFrames(key, 12, (p) => { progress.real = p })
 
   lastDrawn = -1
   drawFrame(0)
+
+  // Fill the in-between frames behind the page, front to back. Each arrival
+  // redraws only if it improves the frame currently on screen.
+  preloadFrames(rest, 6, () => drawFrame(frameState.index))
 
   // Give the brand video its moment (skipped for reduced motion / returns)
   if (!prefersReducedMotion && !RETURNING) {
@@ -594,14 +629,17 @@ function initEffects() {
 
   if (prefersReducedMotion) return
 
-  // Three.js dust field
+  // Three.js dust field — loaded lazily so three.js stays out of the
+  // critical bundle; every consumer already guards on `if (particles)`.
   const particlesCanvas = document.getElementById('particles')
-  try {
-    particles = createParticles(particlesCanvas)
-  } catch (err) {
-    console.warn('WebGL unavailable — particles disabled', err)
-    particlesCanvas.remove()
-  }
+  import('./particles.js')
+    .then(({ createParticles }) => {
+      particles = createParticles(particlesCanvas)
+    })
+    .catch((err) => {
+      console.warn('WebGL unavailable — particles disabled', err)
+      particlesCanvas.remove()
+    })
 
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches
 

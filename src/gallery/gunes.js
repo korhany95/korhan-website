@@ -2,8 +2,8 @@
    Güneş Kırıcılar — "Solstice"
    A fixed fullscreen stage where each image swap happens through
    venetian-blind louvre flips (horizontal strips rotating on X), driven
-   by scroll. A sun rides an arc across the sky with deck progress, and a
-   lamel-angle readout ticks along. Technical section follows.
+   by scroll or by the prev/next arrows, while a lamel-angle readout ticks
+   along with deck progress. Technical section follows.
    ========================================================================= */
 
 import './gunes.css'
@@ -11,6 +11,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import { initCursor } from '../cursor.js'
+import { initLightboxZoom } from '../lightbox-zoom.js'
 
 gsap.registerPlugin(ScrollTrigger)
 initCursor()
@@ -263,7 +264,7 @@ preload(1)
 preload(2)
 
 /* -------------------------------------------------------------------------
-   Scroll: Lenis + deck progress -> slide index, sun, lamel angle
+   Scroll: Lenis + deck progress -> slide index, lamel angle, arrow state
    ------------------------------------------------------------------------- */
 let lenis = null
 if (!prefersReducedMotion) {
@@ -278,16 +279,14 @@ if (!prefersReducedMotion) {
   gsap.ticker.lagSmoothing(0)
 }
 
-const sun = document.getElementById('sun')
-const sunArc = document.getElementById('sunArc')
-const arcLength = sunArc.getTotalLength()
+const deckPrev = document.getElementById('deckPrev')
+const deckNext = document.getElementById('deckNext')
 
-function placeSun(progress) {
-  const pt = sunArc.getPointAtLength(progress * arcLength)
-  // viewBox is 100 x 56 with preserveAspectRatio="none"
-  sun.style.transform = `translate(${(pt.x / 100) * window.innerWidth}px, ${(pt.y / 56) * window.innerHeight}px)`
+function syncNav(index) {
+  deckPrev.disabled = index <= 0
+  deckNext.disabled = index >= SLIDES.length - 1
 }
-placeSun(0)
+syncNav(0)
 
 const deckTrigger = ScrollTrigger.create({
   trigger: deck,
@@ -295,10 +294,10 @@ const deckTrigger = ScrollTrigger.create({
   end: 'bottom bottom',
   onUpdate: (self) => {
     const p = self.progress
-    placeSun(p)
     hudAngle.textContent = Math.round(15 + p * 60)
 
     const target = Math.round(p * (SLIDES.length - 1))
+    syncNav(target)
     if (target !== current && !transitioning) {
       goTo(target, target > current ? 1 : -1)
     } else if (target !== current) {
@@ -306,6 +305,29 @@ const deckTrigger = ScrollTrigger.create({
     }
     preload(Math.min(target + 1, SLIDES.length - 1))
   },
+})
+
+/* Arrows drive the same scroll runway the deck reads from, so a click and a
+   swipe end up in exactly the same place. */
+function scrollToSlide(index) {
+  const idx = Math.max(0, Math.min(SLIDES.length - 1, index))
+  const { start, end } = deckTrigger
+  const y = start + (idx / (SLIDES.length - 1)) * (end - start)
+  if (lenis) lenis.scrollTo(y, { duration: 0.85 })
+  else window.scrollTo({ top: y, behavior: 'smooth' })
+}
+
+// `current` lags during a transition; step from what the deck is aiming at
+const aimedSlide = () =>
+  pending !== null ? pending : Math.round(deckTrigger.progress * (SLIDES.length - 1))
+
+deckPrev.addEventListener('click', () => scrollToSlide(aimedSlide() - 1))
+deckNext.addEventListener('click', () => scrollToSlide(aimedSlide() + 1))
+
+window.addEventListener('keydown', (e) => {
+  if (lightbox.getAttribute('aria-hidden') === 'false') return
+  if (e.key === 'ArrowLeft') scrollToSlide(aimedSlide() - 1)
+  if (e.key === 'ArrowRight') scrollToSlide(aimedSlide() + 1)
 })
 
 // Hide the scroll hint after the first movement; fade stage as tech arrives
@@ -321,6 +343,16 @@ gsap.to('#stage', {
   opacity: 0,
   ease: 'none',
   scrollTrigger: { trigger: '.after', start: 'top 55%', end: 'top 6%', scrub: true },
+})
+
+// The stage only fades — take its arrows out of reach once the technical
+// section owns the screen, or they'd stay clickable at opacity 0.
+const deckNav = document.getElementById('deckNav')
+ScrollTrigger.create({
+  trigger: '.after',
+  start: 'top 55%',
+  onEnter: () => deckNav.classList.add('is-hidden'),
+  onLeaveBack: () => deckNav.classList.remove('is-hidden'),
 })
 
 /* -------------------------------------------------------------------------
@@ -407,7 +439,11 @@ window.addEventListener('resize', () => {
   clearTimeout(resizeTimer)
   resizeTimer = setTimeout(() => {
     layoutStrips()
-    placeSun(deckTrigger.progress)
     ScrollTrigger.refresh()
   }, 150)
 })
+
+/* -------------------------------------------------------------------------
+   Pinch / double-tap zoom for the lightbox image
+   ------------------------------------------------------------------------- */
+initLightboxZoom()

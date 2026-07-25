@@ -29,29 +29,40 @@
     <!-- Chrome -->
     <header class="chrome">
       <a class="chrome__back" href="/"
-        ><span class="chrome__back-arrow">←</span> Taner Yolcu</a
+        ><span class="chrome__back-arrow">←</span> Geri</a
       >
       <span class="chrome__tag">Güneş Kırıcılar</span>
     </header>
 
     <!-- ===== Fixed louvre stage ===== -->
-    <div class="stage" id="stage" aria-hidden="true">
+    <div class="stage" id="stage">
       <div class="stage__base" id="stageBase"></div>
       <div class="stage__strips" id="stageStrips"></div>
       <div class="stage__scrim"></div>
 
-      <!-- Sun path -->
-      <svg class="sunpath" id="sunpath" viewBox="0 0 100 56" preserveAspectRatio="none">
-        <path
-          id="sunArc"
-          d="M -4 54 Q 50 -8 104 54"
-          fill="none"
-          stroke="rgba(216, 162, 74, 0.28)"
-          stroke-width="0.18"
-          stroke-dasharray="0.9 1.3"
-        />
-      </svg>
-      <div class="sun" id="sun"></div>
+      <!-- Slide navigation -->
+      <nav class="deck-nav" id="deckNav" aria-label="Görsel geçişi">
+        <button
+          class="deck-nav__btn deck-nav__btn--prev"
+          id="deckPrev"
+          type="button"
+          aria-label="Önceki görsel"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M15 4 L7 12 L15 20" />
+          </svg>
+        </button>
+        <button
+          class="deck-nav__btn deck-nav__btn--next"
+          id="deckNext"
+          type="button"
+          aria-label="Sonraki görsel"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M9 4 L17 12 L9 20" />
+          </svg>
+        </button>
+      </nav>
 
       <!-- Slide copy -->
       <div class="hud">
@@ -113,7 +124,7 @@
           <a class="outro__ghost" href="/">Ana sayfa</a>
         </div>
         <footer class="footer">
-          <span>© Taner Yolcu Aluminium Works</span>
+          <span>© Taner Yolcu Cons. Ltd. — Aluworks</span>
           <span>Güneş Kırıcılar</span>
         </footer>
       </section>

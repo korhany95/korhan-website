@@ -18,6 +18,7 @@ import { FRAME_CONFIG, buildFrameUrls } from './config.js'
 import { createParticles } from './particles.js'
 import { initCursor } from './cursor.js'
 import { splitChars, splitWords } from './split.js'
+import { initLightboxZoom } from './lightbox-zoom.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -740,6 +741,8 @@ if (lightboxEl) {
     if (e.key === 'ArrowLeft') showSlide(lbIndex - 1)
     if (e.key === 'ArrowRight') showSlide(lbIndex + 1)
   })
+
+  initLightboxZoom()
 }
 
 boot()

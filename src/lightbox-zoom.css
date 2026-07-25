@@ -1,0 +1,67 @@
+/* =========================================================================
+   Lightbox pinch-zoom — shared by the home page and every gallery.
+   Loaded by lightbox-zoom.js, so it lands after each page's own lightbox
+   rules and only adds the bits the gesture layer needs.
+   ========================================================================= */
+
+.lightbox__img {
+  /* the browser's own pan/pinch would fight the gesture handler — we drive
+     the transform ourselves so every device behaves the same */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+.lightbox.is-zoomed .lightbox__img {
+  cursor: grab;
+}
+.lightbox.is-zoomed .lightbox__img:active {
+  cursor: grabbing;
+}
+
+/* Caption and side arrows get out of the way once the image is magnified */
+.lightbox.is-zoomed .lightbox__cap {
+  opacity: 0.35;
+}
+.lightbox.is-zoomed .lightbox__nav {
+  opacity: 0.3;
+}
+.lightbox__cap,
+.lightbox__nav {
+  transition: opacity 0.3s ease;
+}
+
+/* Affordance: tells people the image is pinchable, fades on first gesture */
+.lightbox__zoomhint {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1rem, 4vh, 2.5rem);
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.95rem;
+  border: 1px solid rgba(236, 231, 221, 0.16);
+  border-radius: 999px;
+  background: rgba(10, 10, 12, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-family: inherit;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(236, 231, 221, 0.62);
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.lightbox.is-zoomed .lightbox__zoomhint,
+.lightbox__zoomhint.is-gone {
+  opacity: 0;
+}

@@ -10,6 +10,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import { initCursor } from '../cursor.js'
+import { initLightboxZoom } from '../lightbox-zoom.js'
 
 gsap.registerPlugin(ScrollTrigger)
 initCursor()
@@ -141,6 +142,17 @@ CARDS.forEach((card, ci) => {
     ${card.intro ? `<div class="card__scrolldown"><span>Koleksiyonlar</span><span class="card__scrolldown-line"></span></div>` : ''}`
 
   stack.appendChild(section)
+
+  // Dwell space. Each card is sticky inside .stack, so without a gap in the
+  // flow the next card starts climbing over it on the very first pixel of
+  // scroll — which buried the thumb rail before anyone could tap it. The
+  // spacer holds the card still for a screenful before the hand-over starts.
+  if (ci < CARDS.length - 1) {
+    const spacer = document.createElement('div')
+    spacer.className = 'card__dwell'
+    spacer.setAttribute('aria-hidden', 'true')
+    stack.appendChild(spacer)
+  }
 })
 
 /* -------------------------------------------------------------------------
@@ -224,16 +236,32 @@ if (!prefersReducedMotion) {
 /* -------------------------------------------------------------------------
    Thumb rails: slow marquee drift, alternating direction
    ------------------------------------------------------------------------- */
+const coarsePointer = window.matchMedia('(hover: none) and (pointer: coarse)').matches
+
 document.querySelectorAll('[data-rail]').forEach((track) => {
+  const rail = track.parentElement
+
+  // On touch there is no hover to pause on, and a strip that keeps sliding
+  // under your thumb is what made these images hard to open. Give phones a
+  // plain swipeable row instead of a marquee.
+  if (coarsePointer || prefersReducedMotion) {
+    rail.classList.add('card__rail--swipe')
+    return
+  }
+
   const original = track.innerHTML
   track.innerHTML = original + original
   const dirRight = track.dataset.rail === '1'
   const loopWidth = () => track.scrollWidth / 2
 
-  if (prefersReducedMotion) return
+  // Hovering to aim at a thumbnail stops the drift
+  let paused = false
+  rail.addEventListener('pointerenter', () => { paused = true })
+  rail.addEventListener('pointerleave', () => { paused = false })
 
   const proxy = { x: dirRight ? -1 : 0 }
   gsap.ticker.add((_, dt) => {
+    if (paused) return
     const lw = loopWidth()
     if (!lw) return
     const speed = 22 // px/s
@@ -317,3 +345,8 @@ window.addEventListener('resize', () => {
   clearTimeout(resizeTimer)
   resizeTimer = setTimeout(() => ScrollTrigger.refresh(), 150)
 })
+
+/* -------------------------------------------------------------------------
+   Pinch / double-tap zoom for the lightbox image
+   ------------------------------------------------------------------------- */
+initLightboxZoom()

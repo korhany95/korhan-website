@@ -255,7 +255,7 @@ img {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 16vh;
+  height: 16svh;
   background: linear-gradient(180deg, transparent, rgba(158, 200, 232, 0.05));
   border-top: 1px solid rgba(158, 200, 232, 0.1);
   pointer-events: none;
@@ -522,7 +522,7 @@ img {
 
 .lightbox__figure {
   max-width: min(92vw, 1400px);
-  max-height: 86vh;
+  max-height: 86svh;
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
@@ -530,7 +530,7 @@ img {
 
 .lightbox__img {
   max-width: 100%;
-  max-height: 78vh;
+  max-height: 78svh;
   object-fit: contain;
   border-radius: 8px;
 }

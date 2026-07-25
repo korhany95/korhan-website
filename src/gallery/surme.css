@@ -451,7 +451,7 @@ img {
 
 .lightbox__figure {
   max-width: min(92vw, 1400px);
-  max-height: 86vh;
+  max-height: 86svh;
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
@@ -459,7 +459,7 @@ img {
 
 .lightbox__img {
   max-width: 100%;
-  max-height: 78vh;
+  max-height: 78svh;
   object-fit: contain;
   border-radius: 10px;
 }

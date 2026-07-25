@@ -10,6 +10,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import { splitChars } from '../split.js'
 import { initCursor } from '../cursor.js'
+import { initLightboxZoom } from '../lightbox-zoom.js'
 
 gsap.registerPlugin(ScrollTrigger)
 initCursor()
@@ -312,3 +313,8 @@ window.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowLeft') show(current - 1)
   if (e.key === 'ArrowRight') show(current + 1)
 })
+
+/* -------------------------------------------------------------------------
+   Pinch / double-tap zoom for the lightbox image
+   ------------------------------------------------------------------------- */
+initLightboxZoom()

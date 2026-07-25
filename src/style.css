@@ -373,7 +373,7 @@ a.chrome__menu-item:hover::after {
 
 .panel {
   position: relative;
-  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   align-items: center;
   padding: clamp(5rem, 12vh, 9rem) var(--pad);
@@ -473,6 +473,12 @@ html.reduce-motion [data-reveal] {
   font-size: clamp(1.9rem, 5vw, 4rem);
   text-transform: none;
   letter-spacing: 0.005em;
+}
+
+/* "Aluminium Works" rides under the company name — the shared serif accent
+   is sized for headline-scale lines, so lift it back to a readable size */
+.hero__title--brand .hero__line--serif {
+  font-size: 0.62em;
 }
 
 .hero__line {
@@ -627,7 +633,7 @@ html.reduce-motion .split .char {
    Manifesto
    ========================================================================= */
 .panel--manifesto {
-  min-height: 130vh;
+  min-height: 130svh;
 }
 
 .manifesto {
@@ -766,7 +772,7 @@ html.reduce-motion .service {
 
 .hpin {
   position: relative;
-  height: 100vh;
+  height: 100svh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -924,7 +930,7 @@ html.reduce-motion .service {
    Stats
    ========================================================================= */
 .panel--stats {
-  min-height: 60vh;
+  min-height: 60svh;
 }
 
 .stats {
@@ -1135,7 +1141,9 @@ html.reduce-motion .service {
 
 .contact-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* five cards (mail, tel, faks, cep, adres) — let them reflow rather than
+     forcing a fixed column count at every width */
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
   gap: 1rem;
   width: 100%;
 }
@@ -1166,6 +1174,9 @@ html.reduce-motion .service {
 
 .contact-card__value {
   font-size: clamp(0.9rem, 1.4vw, 1.05rem);
+  line-height: 1.45;
+  /* the email is one long unbreakable token on narrow cards */
+  overflow-wrap: anywhere;
 }
 
 .footer {
@@ -1200,7 +1211,7 @@ html.reduce-motion .service {
 
 .lightbox__figure {
   max-width: min(92vw, 1400px);
-  max-height: 86vh;
+  max-height: 86svh;
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
@@ -1208,7 +1219,7 @@ html.reduce-motion .service {
 
 .lightbox__img {
   max-width: 100%;
-  max-height: 78vh;
+  max-height: 78svh;
   object-fit: contain;
   border-radius: 10px;
 }
@@ -1271,7 +1282,6 @@ html.reduce-motion .service {
   .about { grid-template-columns: 1fr; }
   .service { grid-template-columns: 3rem 1fr 2rem; }
   .service__desc { display: none; }
-  .contact-grid { grid-template-columns: 1fr; }
   .hero__foot { flex-direction: column; align-items: flex-start; }
   .hero__coords { text-align: left; flex-direction: row; gap: 1.25rem; }
   .service-preview { display: none; }

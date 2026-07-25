@@ -361,17 +361,24 @@ main,
   transition: color 0.8s;
 }
 
+/* The morph clip is portrait (1024 x 1280). Stretched to the column width it
+   stood ~1500px tall, so the old height cap cropped half the frame away —
+   size the box to the clip's own ratio and let height lead instead. */
 .kutu__video {
   position: relative;
+  margin-inline: auto;
+  width: min(100%, calc(80svh * 1024 / 1280));
+  aspect-ratio: 1024 / 1280;
   border-radius: 14px;
   overflow: hidden;
   border: 1px solid var(--line);
+  background: #0a0a0b;
 }
 .kutu__video video {
   display: block;
   width: 100%;
-  max-height: 76svh;
-  object-fit: cover;
+  height: 100%;
+  object-fit: contain;
 }
 .kutu__video-tag {
   position: absolute;

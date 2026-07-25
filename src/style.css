@@ -1179,6 +1179,16 @@ html.reduce-motion .service {
   overflow-wrap: anywhere;
 }
 
+/* Cards that stack several dialable values (the two mobile numbers) link
+   each line individually rather than wrapping the whole card */
+a.contact-card__value {
+  width: fit-content;
+  transition: color 0.3s;
+}
+a.contact-card__value:hover {
+  color: var(--gold);
+}
+
 .footer {
   display: flex;
   justify-content: space-between;

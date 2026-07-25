@@ -11,6 +11,7 @@ import Lenis from 'lenis'
 import { splitChars } from '../split.js'
 import { initCursor } from '../cursor.js'
 import { initLightboxZoom } from '../lightbox-zoom.js'
+import { initAnalytics } from '../analytics.js'
 
 gsap.registerPlugin(ScrollTrigger)
 initCursor()
@@ -316,3 +317,5 @@ window.addEventListener('keydown', (e) => {
    Pinch / double-tap zoom for the lightbox image
    ------------------------------------------------------------------------- */
 initLightboxZoom()
+
+initAnalytics()

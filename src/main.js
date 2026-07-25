@@ -19,6 +19,7 @@ import { createParticles } from './particles.js'
 import { initCursor } from './cursor.js'
 import { splitChars, splitWords } from './split.js'
 import { initLightboxZoom } from './lightbox-zoom.js'
+import { initAnalytics } from './analytics.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -746,3 +747,5 @@ if (lightboxEl) {
 }
 
 boot()
+
+initAnalytics()

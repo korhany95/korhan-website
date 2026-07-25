@@ -11,6 +11,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import { initCursor } from '../cursor.js'
 import { initLightboxZoom } from '../lightbox-zoom.js'
+import { initAnalytics } from '../analytics.js'
 
 gsap.registerPlugin(ScrollTrigger)
 initCursor()
@@ -350,3 +351,5 @@ window.addEventListener('resize', () => {
    Pinch / double-tap zoom for the lightbox image
    ------------------------------------------------------------------------- */
 initLightboxZoom()
+
+initAnalytics()

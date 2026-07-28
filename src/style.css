@@ -526,7 +526,7 @@ html.reduce-motion [data-reveal] {
 .split--gold {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 0.62em;
+  font-size: 0.8em;
 }
 
 .split--gold .char {

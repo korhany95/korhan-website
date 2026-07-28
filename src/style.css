@@ -286,7 +286,7 @@ a.chrome__menu-item:hover::after {
 
 .chrome__logo {
   display: block;
-  width: clamp(28px, 3vw, 36px);
+  width: clamp(44px, 4.5vw, 60px);
   height: auto;
 }
 

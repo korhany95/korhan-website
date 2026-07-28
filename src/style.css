@@ -290,6 +290,34 @@ a.chrome__menu-item:hover::after {
   height: auto;
 }
 
+/* Instagram: pinned to the far right on desktop, a drawer row on mobile */
+.chrome__social {
+  position: absolute;
+  right: var(--pad);
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.3s var(--ease-out);
+}
+
+.chrome__social:hover {
+  color: var(--gold);
+}
+
+.chrome__social-icon {
+  display: block;
+  width: 22px;
+  height: 22px;
+}
+
+.chrome__social-label {
+  display: none;
+}
+
 /* Brand label + hamburger: mobile-only (desktop keeps the inline menu) */
 .chrome__brand,
 .chrome__burger {
@@ -382,6 +410,29 @@ a.chrome__menu-item:hover::after {
   .chrome__menu .chrome__menu-item {
     font-size: 1rem;
     letter-spacing: 0.24em;
+  }
+
+  /* back in flow so it sits as the last row of the drawer */
+  .chrome__social {
+    position: static;
+    transform: none;
+    margin-top: 0.4rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    width: min(72vw, 18rem);
+    justify-content: center;
+  }
+
+  .chrome__social-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .chrome__social-label {
+    display: block;
+    font-size: 0.82rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
   }
 }
 

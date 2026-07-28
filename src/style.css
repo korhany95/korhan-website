@@ -272,6 +272,24 @@ a.chrome__menu-item:hover::after {
   transform: scaleX(1);
 }
 
+/* Logo pinned left on every viewport; the centered menu ignores it */
+.chrome__home {
+  position: absolute;
+  left: var(--pad);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+}
+
+.chrome__logo {
+  display: block;
+  width: clamp(28px, 3vw, 36px);
+  height: auto;
+}
+
 /* Brand label + hamburger: mobile-only (desktop keeps the inline menu) */
 .chrome__brand,
 .chrome__burger {
@@ -286,6 +304,12 @@ a.chrome__menu-item:hover::after {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     background: rgba(10, 10, 12, 0.88);
+  }
+
+  /* back in flow so space-between pushes the burger to the right */
+  .chrome__home {
+    position: static;
+    transform: none;
   }
 
   .chrome__brand {
@@ -499,6 +523,10 @@ html.reduce-motion [data-reveal] {
 }
 
 /* split chars */
+.split--gold .char {
+  color: var(--gold);
+}
+
 .split .char {
   display: inline-block;
   transform: translateY(115%) rotateX(-72deg);
@@ -1301,9 +1329,9 @@ a.contact-card__value:hover {
   .slide__media { width: 78vw; }
   .slide--tall .slide__media { width: 78vw; }
   .lightbox__nav { width: 40px; height: 40px; }
-  /* keep the giant outlined RW60 heading inside the phone screen */
+  /* keep the giant outlined heading inside the phone screen */
   .hpin__head { max-width: calc(100vw - 2 * var(--pad)); }
-  .hpin__head .display--giant { font-size: clamp(2.1rem, 10.5vw, 3rem); }
+  .hpin__head .display--giant { font-size: clamp(1.4rem, 7.5vw, 2.4rem); }
   .footer { flex-direction: column; gap: 0.4rem; }
   .footer__mid { display: none; }
   .chrome__menu-item { font-size: 0.62rem; letter-spacing: 0.16em; }
@@ -1317,7 +1345,7 @@ a.contact-card__value:hover {
   .hero__title--brand { font-size: clamp(1.5rem, 5vw, 4rem); }
   .display { font-size: clamp(1.55rem, 4.6vw, 3.6rem); }
   .display--giant { font-size: clamp(2.6rem, 9.5vw, 7.5rem); }
-  .hpin__head .display--giant { font-size: clamp(1.75rem, 10.5vw, 3rem); }
+  .hpin__head .display--giant { font-size: clamp(1.4rem, 7.5vw, 2.4rem); }
   .contact__title { font-size: clamp(1.8rem, 5.6vw, 4.6rem); }
   .manifesto { font-size: clamp(1.05rem, 3vw, 2.4rem); }
   .marquee--ghost .marquee__item { font-size: clamp(1.45rem, 4.5vw, 3.6rem); }

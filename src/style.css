@@ -523,6 +523,12 @@ html.reduce-motion [data-reveal] {
 }
 
 /* split chars */
+.split--gold {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.62em;
+}
+
 .split--gold .char {
   color: var(--gold);
 }

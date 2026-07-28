@@ -481,6 +481,7 @@ html.reduce-motion [data-reveal] {
 
 .hero__eyebrow {
   margin-bottom: clamp(1.25rem, 3vh, 2.25rem);
+  color: rgba(236, 231, 221, 0.82);
 }
 
 .hero__title {
@@ -554,7 +555,7 @@ html.reduce-motion .split .char {
 
 .hero__lede {
   max-width: 44ch;
-  color: var(--ink-dim);
+  color: rgba(236, 231, 221, 0.85);
   font-size: clamp(0.95rem, 1.4vw, 1.1rem);
 }
 

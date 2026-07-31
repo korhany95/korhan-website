@@ -18,7 +18,9 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 90;
+  /* Above every overlay (lightboxes and the loader sit at 100) — otherwise the
+     native cursor is hidden and the custom one is painted behind them */
+  z-index: 1000;
   pointer-events: none;
   opacity: 0;
 }

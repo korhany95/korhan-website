@@ -79,7 +79,7 @@ const SERIES = {
     ],
   },
   kemerli: {
-    label: 'Kemerli',
+    label: 'Villa Görselleri',
     dir: 'Kemerli ve Karolajlı Isı yalıtımlı (t100 seri)',
     files: [
       'Kemerli Karolajlı Sürme.webp',
@@ -89,11 +89,28 @@ const SERIES = {
       'Orta Kayıt Detay.webp',
       'Üst ve Alt sabit, orta açılım, Karolajlı 2.webp',
       'image_1783755579429_2b4e5e05.webp',
+      // Villa render seti — kendi klasöründen
+      { dir: 'Villa', file: 'Birds Eye shot.webp' },
+      { dir: 'Villa', file: 'On.webp' },
+      { dir: 'Villa', file: 'On ve Balkon.webp' },
+      { dir: 'Villa', file: 'Evin Onu.webp' },
+      { dir: 'Villa', file: 'Arka Bahce.webp' },
+      { dir: 'Villa', file: 'arka bahce 2.webp' },
+      { dir: 'Villa', file: 'agacli.webp' },
+      { dir: 'Villa', file: 'karolaj Detay.webp' },
+      { dir: 'Villa', file: 'image_1785439405666_07976d14.webp' },
+      { dir: 'Villa', file: 'Salon.webp' },
+      { dir: 'Villa', file: 'Mutfak.webp' },
+      { dir: 'Villa', file: 'Merdiven.webp' },
+      { dir: 'Villa', file: 'Bedroom 1.webp' },
+      { dir: 'Villa', file: 'bedroom 2.webp' },
     ],
   },
 }
 
 const url = (dir, file) => encPath(`${BASE}/${dir}/${file}`)
+const srcOf = (serie, entry) =>
+  typeof entry === 'string' ? url(serie.dir, entry) : url(entry.dir, entry.file)
 
 /* -------------------------------------------------------------------------
    Build the wall — interleave series so "Tümü" mixes them visually
@@ -107,9 +124,9 @@ const maxLen = Math.max(...keys.map((k) => SERIES[k].files.length))
 for (let i = 0; i < maxLen; i++) {
   for (const key of keys) {
     const serie = SERIES[key]
-    const file = serie.files[i]
-    if (!file) continue
-    const src = url(serie.dir, file)
+    const entry = serie.files[i]
+    if (!entry) continue
+    const src = srcOf(serie, entry)
 
     const card = document.createElement('button')
     card.type = 'button'

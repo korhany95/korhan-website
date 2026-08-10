@@ -1,10 +1,11 @@
 /* =========================================================================
-   Sürme Doğramaları — "Showroom"
-   Light theme, split hero with floating video, sticky filter chips and a
-   filterable masonry wall with staggered entrances + lightbox.
+   Villa Görselleri — render galerisi
+   Fullscreen hero video, three captioned masonry sections (4K render seti,
+   villa renderları, kemerli & karolajlı detaylar) and a lightbox that walks
+   the whole wall in one continuous list.
    ========================================================================= */
 
-import './surme.css'
+import './villa.css'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
@@ -25,90 +26,107 @@ try { sessionStorage.setItem('tyc-visited', '1') } catch { /* private mode */ }
 /* -------------------------------------------------------------------------
    Content
    ------------------------------------------------------------------------- */
-const BASE = '/media/Sürme Doğramalar'
 const encPath = (p) => p.split('/').map(encodeURIComponent).join('/')
-const HERO_VIDEO = `${BASE}/t100/Intro.mp4`
 
-const SERIES = {
-  s3200: {
-    label: '3200',
-    dir: '3200 seri',
-    files: [
-      '3200 series 2.webp',
-      '3200 series 3.webp',
-      '3200 series kanat.webp',
-      '3200 Silver Pervazsız.webp',
-      '3200 Teşhir Kesit 2.webp',
-      '3200 Teşhir kesit 3.webp',
-      '3200 Teşhir Kesit.webp',
-      '3200 Şampanya pervazlı 2 ray.webp',
-      '3200 Şampanya.webp',
-      'pervazlı 2 ray kasa.webp',
-    ],
-  },
-  t100: {
-    label: 'T100',
-    dir: 't100',
-    files: [
-      'Karşıdan kesit siyah..webp',
-      'Oval Kenet duruş.webp',
-      'Su tahliye.webp',
-      'Yan kesit.webp',
-      '2 ray pervazlı kasa.webp',
-    ],
-  },
-  rst116: {
-    label: 'RST116',
-    dir: 'RST116',
-    files: [
-      'image_1784114670962_d702e0bf.webp',
-      'image_1784114679958_e95fa78e.webp',
-      'image_1784115064291_2b8ed5e5.webp',
-    ],
-  },
-  // Kemerli/karolajlı ve villa renderları artık /gallery/villa-gorselleri.html
-}
+const VILLA_BASE = '/media/Villa Görselleri'
+const SURME_BASE = '/media/Sürme Doğramalar'
+const HERO_VIDEO = `${VILLA_BASE}/hero.mp4`
 
-const srcOf = (serie, file) => encPath(`${BASE}/${serie.dir}/${file}`)
+const SECTIONS = [
+  {
+    id: 'set4k',
+    title: '4K <em>Render Seti</em>',
+    badge: '4K',
+    base: `${VILLA_BASE}/4k`,
+    files: [
+      ['03_day_exterior.webp', 'Gündüz Cephesi'],
+      ['02_night_exterior.webp', 'Gece Cephesi'],
+      ['10_pool_view.webp', 'Havuz Manzarası'],
+      ['01_hallway_interior.webp', 'Giriş Holü'],
+      ['05_living_room.webp', 'Salon'],
+      ['04_kitchen.webp', 'Mutfak'],
+      ['06_bedroom_view.webp', 'Yatak Odası'],
+      ['09_staircase.webp', 'Merdiven'],
+      ['08_bathroom.webp', 'Banyo'],
+      ['07_garden_detail.webp', 'Bahçe Detayı'],
+    ],
+  },
+  {
+    id: 'villa',
+    title: 'Villa <em>Renderları</em>',
+    badge: 'Villa',
+    base: `${SURME_BASE}/Villa`,
+    files: [
+      ['Birds Eye shot.webp', 'Kuşbakışı'],
+      ['On.webp', 'Ön Cephe'],
+      ['On ve Balkon.webp', 'Ön Cephe ve Balkon'],
+      ['Evin Onu.webp', 'Evin Önü'],
+      ['Arka Bahce.webp', 'Arka Bahçe'],
+      ['arka bahce 2.webp', 'Arka Bahçe II'],
+      ['agacli.webp', 'Ağaçlı Bahçe'],
+      ['karolaj Detay.webp', 'Karolaj Detayı'],
+      ['image_1785439405666_07976d14.webp', 'Cephe Detayı'],
+      ['Salon.webp', 'Salon'],
+      ['Mutfak.webp', 'Mutfak'],
+      ['Merdiven.webp', 'Merdiven'],
+      ['Bedroom 1.webp', 'Yatak Odası I'],
+      ['bedroom 2.webp', 'Yatak Odası II'],
+    ],
+  },
+  {
+    id: 'kemerli',
+    title: 'Kemerli & <em>Karolajlı</em>',
+    badge: 'Kemerli',
+    base: `${SURME_BASE}/Kemerli ve Karolajlı Isı yalıtımlı (t100 seri)`,
+    files: [
+      ['Kemerli Karolajlı Sürme.webp', 'Kemerli Karolajlı Sürme'],
+      ['Kemerli Karolajlı Sürme (içerden bakış).webp', 'İçerden Bakış'],
+      ['Kemerli Karolajlı Sürme İçerden bakış 2.webp', 'İçerden Bakış II'],
+      ['Kareloj Detay.webp', 'Karolaj Detayı'],
+      ['Orta Kayıt Detay.webp', 'Orta Kayıt Detayı'],
+      ['Üst ve Alt sabit, orta açılım, Karolajlı 2.webp', 'Üst-Alt Sabit, Orta Açılım'],
+      ['image_1783755579429_2b4e5e05.webp', 'Kemerli Sürme Detay'],
+    ],
+  },
+]
 
 /* -------------------------------------------------------------------------
-   Build the wall — interleave series so "Tümü" mixes them visually
+   Build the wall — one grid per section, one flat item list for the lightbox
    ------------------------------------------------------------------------- */
 const wall = document.getElementById('wall')
-const items = [] // { el, key, src, cap }
+const items = [] // { el, src, label, badge }
 
-const keys = Object.keys(SERIES)
-const maxLen = Math.max(...keys.map((k) => SERIES[k].files.length))
+for (const section of SECTIONS) {
+  const head = document.createElement('header')
+  head.className = 'wall__head'
+  head.innerHTML = `
+    <h2 class="wall__title">${section.title}</h2>
+    <span class="wall__count">${section.files.length} görsel</span>`
+  wall.appendChild(head)
 
-for (let i = 0; i < maxLen; i++) {
-  for (const key of keys) {
-    const serie = SERIES[key]
-    const entry = serie.files[i]
-    if (!entry) continue
-    const src = srcOf(serie, entry)
+  const grid = document.createElement('div')
+  grid.className = 'wall__grid'
+  wall.appendChild(grid)
+
+  for (const [file, label] of section.files) {
+    const src = encPath(`${section.base}/${file}`)
 
     const card = document.createElement('button')
     card.type = 'button'
     card.className = 'card'
-    card.dataset.serie = key
     card.innerHTML = `
       <span class="card__media">
-        <img class="card__img" src="${src}" alt="${serie.label}" loading="lazy" decoding="async" />
+        <img class="card__img" src="${src}" alt="${label}" loading="lazy" decoding="async" />
       </span>
       <span class="card__meta">
-        <span class="card__serie">${serie.label}</span>
+        <span class="card__serie">${label}</span>
       </span>`
-    wall.appendChild(card)
-    items.push({ el: card, key, src, label: serie.label })
+    grid.appendChild(card)
+    items.push({ el: card, src, label, badge: section.badge })
   }
 }
 
-// Counters (hero total + chips)
 document.querySelector('[data-total-count]').textContent = items.length
-document.querySelectorAll('[data-filter-count]').forEach((el) => {
-  const key = el.dataset.filterCount
-  el.textContent = key === 'all' ? items.length : SERIES[key].files.length
-})
 
 /* -------------------------------------------------------------------------
    Smooth scroll + intro
@@ -144,7 +162,6 @@ if (!prefersReducedMotion) {
       stagger: 0.12,
     }, '-=0.6')
 
-  // Fullscreen hero video drifts + copy recedes as you leave (like cephe)
   gsap.to('.hero__video', {
     yPercent: 16,
     scale: 1.12,
@@ -162,13 +179,11 @@ if (!prefersReducedMotion) {
 }
 
 /* -------------------------------------------------------------------------
-   Card entrances (batched) — replays when cards re-enter after filtering
+   Card entrances (batched)
    ------------------------------------------------------------------------- */
-function observeEntrances() {
-  if (prefersReducedMotion) {
-    items.forEach(({ el }) => el.classList.add('is-in'))
-    return
-  }
+if (prefersReducedMotion) {
+  items.forEach(({ el }) => el.classList.add('is-in'))
+} else {
   const io = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry, i) => {
@@ -181,64 +196,10 @@ function observeEntrances() {
     { rootMargin: '0px 0px -6% 0px' }
   )
   items.forEach(({ el }) => io.observe(el))
-  return io
-}
-observeEntrances()
-
-/* -------------------------------------------------------------------------
-   Filtering: fade the wall out, swap visibility, cascade back in
-   ------------------------------------------------------------------------- */
-const chips = document.querySelectorAll('.filters__chip')
-let activeFilter = 'all'
-let filtering = false
-
-function applyFilter(key) {
-  if (filtering || key === activeFilter) return
-  filtering = true
-  activeFilter = key
-
-  chips.forEach((c) => c.classList.toggle('is-active', c.dataset.filter === key))
-
-  const swap = () => {
-    items.forEach(({ el, key: k }) => {
-      const show = key === 'all' || k === key
-      el.classList.toggle('is-hidden', !show)
-      el.classList.remove('is-in')
-    })
-    ScrollTrigger.refresh()
-  }
-
-  if (prefersReducedMotion) {
-    swap()
-    items.forEach(({ el }) => el.classList.add('is-in'))
-    filtering = false
-    return
-  }
-
-  gsap.to(wall, {
-    opacity: 0,
-    y: 14,
-    duration: 0.28,
-    ease: 'power2.in',
-    onComplete: () => {
-      swap()
-      gsap.set(wall, { y: 0 })
-      gsap.to(wall, { opacity: 1, duration: 0.3, ease: 'power2.out' })
-      const visible = items.filter(({ el }) => !el.classList.contains('is-hidden'))
-      visible.forEach(({ el }, i) => {
-        setTimeout(() => el.classList.add('is-in'), Math.min(i * 45, 700))
-      })
-      filtering = false
-    },
-  })
 }
 
-chips.forEach((chip) => {
-  chip.addEventListener('click', () => applyFilter(chip.dataset.filter))
-})
-
 /* -------------------------------------------------------------------------
-   Lightbox — navigates within the active filter
+   Lightbox
    ------------------------------------------------------------------------- */
 const lightbox = document.getElementById('lightbox')
 const lightboxImg = document.getElementById('lightboxImg')
@@ -246,23 +207,20 @@ const lightboxCap = document.getElementById('lightboxCap')
 let current = 0
 let open = false
 
-const visibleItems = () => items.filter(({ el }) => !el.classList.contains('is-hidden'))
-
 function show(i) {
-  const list = visibleItems()
-  current = (i + list.length) % list.length
-  const item = list[current]
+  current = (i + items.length) % items.length
+  const item = items[current]
   lightboxImg.src = item.src
   lightboxImg.alt = item.label
-  lightboxCap.textContent = `${item.label} · ${current + 1} / ${list.length}`
+  lightboxCap.textContent = `${item.badge} · ${item.label} · ${current + 1} / ${items.length}`
   if (!prefersReducedMotion) {
     gsap.fromTo('.lightbox__figure', { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 0.45, ease: 'power3.out' })
   }
 }
 
-function openLightbox(item) {
+function openLightbox(index) {
   open = true
-  show(visibleItems().indexOf(item))
+  show(index)
   lightbox.setAttribute('aria-hidden', 'false')
   gsap.to(lightbox, { autoAlpha: 1, duration: 0.35, ease: 'power2.out' })
   if (lenis) lenis.stop()
@@ -275,8 +233,8 @@ function closeLightbox() {
   if (lenis) lenis.start()
 }
 
-items.forEach((item) => {
-  item.el.addEventListener('click', () => openLightbox(item))
+items.forEach((item, i) => {
+  item.el.addEventListener('click', () => openLightbox(i))
 })
 
 document.getElementById('lightboxClose').addEventListener('click', closeLightbox)

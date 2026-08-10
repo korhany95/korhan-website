@@ -11,10 +11,10 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <title>Sürme Doğramaları — Taner Yolcu Aluminium Works</title>
+    <title>Villa Görselleri — Taner Yolcu Aluminium Works</title>
     <meta
       name="description"
-      content="Sürme doğrama serileri — 3200, T100, RST116, kemerli ve karolajlı ısı yalıtımlı sistemler. Taner Yolcu Aluminium Works galerisi."
+      content="Villa projelerinden 4K render seti, dış cephe ve iç mekân görselleri, kemerli ve karolajlı sürme doğrama detayları. Taner Yolcu Aluminium Works."
     />
     <!-- Critical: avoid unstyled flash while the bundled CSS loads.
          The page stylesheet reveals <body> again via a class rule. -->
@@ -29,17 +29,17 @@
       rel="stylesheet"
     />
   </head>
-  <body class="surme">
+  <body class="villa">
     <!-- Chrome -->
     <header class="chrome">
       <a class="chrome__back" href="/"
         ><span class="chrome__back-arrow">←</span> Geri</a
       >
-      <span class="chrome__tag">Sürme Doğramaları</span>
+      <span class="chrome__tag">Villa Görselleri</span>
     </header>
 
     <main>
-      <!-- ===== Hero: fullscreen showroom video ===== -->
+      <!-- ===== Hero: fullscreen villa video ===== -->
       <section class="hero">
         <video
           class="hero__video"
@@ -55,18 +55,18 @@
         <div class="hero__scrim" aria-hidden="true"></div>
         <div class="hero__inner">
           <p class="eyebrow" data-stagger>
-            <span class="eyebrow__dot"></span>Showroom — 3 seri
+            <span class="eyebrow__dot"></span>Render galerisi
           </p>
           <h1 class="hero__title">
-            <span class="hero__line"><span data-split>Sürme</span></span>
+            <span class="hero__line"><span data-split>Villa</span></span>
             <span class="hero__line hero__line--serif"
-              ><span data-split>Doğramaları</span></span
+              ><span data-split>Görselleri</span></span
             >
           </h1>
           <p class="hero__lede" data-stagger>
-            Sessiz kayan kanatlar, ısı yalıtımlı profiller ve ince
-            görünüm hatları. Üç seri, tek showroom — filtreleyin,
-            yakından inceleyin.
+            Tamamlanmış villa projelerinden dış cephe, iç mekân ve doğrama
+            detayları. Kemerli karolajlı sürme sistemlerin gerçek ölçekte
+            nasıl durduğunu görün.
           </p>
           <div class="hero__stats" data-stagger>
             <div class="hero__stat">
@@ -74,8 +74,8 @@
               <span class="hero__stat-label">Görsel</span>
             </div>
             <div class="hero__stat">
-              <span class="hero__stat-no">3</span>
-              <span class="hero__stat-label">Seri</span>
+              <span class="hero__stat-no">4K</span>
+              <span class="hero__stat-label">Render seti</span>
             </div>
             <div class="hero__stat">
               <span class="hero__stat-no">T100</span>
@@ -85,34 +85,16 @@
         </div>
       </section>
 
-      <!-- ===== Filter bar (sticky) ===== -->
-      <nav class="filters" id="filters" aria-label="Seri filtresi">
-        <button class="filters__chip is-active" data-filter="all">
-          Tümü <span class="filters__n" data-filter-count="all"></span>
-        </button>
-        <button class="filters__chip" data-filter="s3200">
-          3200 Serisi <span class="filters__n" data-filter-count="s3200"></span>
-        </button>
-        <button class="filters__chip" data-filter="t100">
-          T100 <span class="filters__n" data-filter-count="t100"></span>
-        </button>
-        <button class="filters__chip" data-filter="rst116">
-          RST116 <span class="filters__n" data-filter-count="rst116"></span>
-        </button>
-      </nav>
-
-      <!-- ===== Masonry ===== -->
-      <section class="wall">
-        <div class="wall__grid" id="wall"></div>
-      </section>
+      <!-- ===== Masonry sections ===== -->
+      <section class="wall" id="wall"></section>
 
       <!-- ===== Outro ===== -->
       <section class="outro">
         <h2 class="outro__title">
-          Hangi seri <em>size</em> göre?
+          Projenizi <em>birlikte</em> kuralım
         </h2>
         <p class="outro__sub">
-          Ölçü alımından montaja — birlikte karar verelim.
+          Ölçü alımından montaja — villa ölçeğinde uçtan uca çözüm.
         </p>
         <div class="outro__actions">
           <a class="outro__cta" href="/#contact">Teklif al →</a>
@@ -120,7 +102,7 @@
         </div>
         <footer class="footer">
           <span>© Taner Yolcu Cons. Ltd. — Aluworks</span>
-          <span>Sürme Doğramaları</span>
+          <span>Villa Görselleri</span>
         </footer>
       </section>
     </main>
@@ -136,6 +118,6 @@
       </figure>
     </div>
 
-    <script type="module" src="/src/gallery/surme.js"></script>
+    <script type="module" src="/src/gallery/villa.js"></script>
   </body>
 </html>

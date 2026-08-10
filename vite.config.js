@@ -19,6 +19,7 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         cephe: resolve(__dirname, 'gallery/cephe-dogramalari.html'),
         surme: resolve(__dirname, 'gallery/surme-dogramalari.html'),
+        villa: resolve(__dirname, 'gallery/villa-gorselleri.html'),
         gunes: resolve(__dirname, 'gallery/gunes-kiricilar.html'),
         vitrin: resolve(__dirname, 'gallery/vitrin-dogramalari.html'),
         cam: resolve(__dirname, 'gallery/cam-turleri.html'),

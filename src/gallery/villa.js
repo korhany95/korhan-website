@@ -1,8 +1,8 @@
 /* =========================================================================
    Villa Görselleri — render galerisi
-   Fullscreen hero video, three captioned masonry sections (4K render seti,
-   villa renderları, kemerli & karolajlı detaylar) and a lightbox that walks
-   the whole wall in one continuous list.
+   Fullscreen hero video, three captioned masonry sections (yüksek kemerli
+   ve karolajlı, karolaj doğramalı taş ev, kemerli & karolajlı detaylar) and
+   a lightbox that walks the whole wall in one continuous list.
    ========================================================================= */
 
 import './villa.css'

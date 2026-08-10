@@ -35,8 +35,8 @@ const HERO_VIDEO = `${VILLA_BASE}/hero.mp4`
 const SECTIONS = [
   {
     id: 'set4k',
-    title: '4K <em>Render Seti</em>',
-    badge: '4K',
+    title: 'Yüksek Kemerli ve <em>Karolajlı</em>',
+    badge: 'Yüksek Kemerli',
     base: `${VILLA_BASE}/4k`,
     files: [
       ['03_day_exterior.webp', 'Gündüz Cephesi'],
@@ -53,8 +53,8 @@ const SECTIONS = [
   },
   {
     id: 'villa',
-    title: 'Villa <em>Renderları</em>',
-    badge: 'Villa',
+    title: 'Karolaj Doğramalı <em>Taş Ev</em>',
+    badge: 'Taş Ev',
     base: `${SURME_BASE}/Villa`,
     files: [
       ['Birds Eye shot.webp', 'Kuşbakışı'],

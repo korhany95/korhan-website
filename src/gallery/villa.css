@@ -161,7 +161,10 @@ img {
   position: relative;
   z-index: 2;
   padding: 0 var(--pad) clamp(4rem, 10vh, 7rem);
-  max-width: 1100px;
+  /* .hero is a flex row, so without an explicit width this block
+     shrink-wraps and the nowrap title lines get clipped */
+  width: 100%;
+  max-width: 1400px;
 }
 
 .hero__title {
@@ -177,7 +180,10 @@ img {
 .hero__line {
   display: block;
   overflow: hidden;
-  padding-bottom: 0.08em;
+  /* the clip box has to sit a hair outside the glyphs on both axes:
+     below for descenders, right so the last letter isn't shaved off */
+  padding: 0 0.25em 0.08em 0;
+  margin-right: -0.25em;
   /* every .char is an inline-block, so without this the browser happily
      breaks a word between two letters ("APARTMA / N") */
   white-space: nowrap;

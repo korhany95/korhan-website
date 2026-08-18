@@ -11,10 +11,10 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <title>Villa Görselleri — Taner Yolcu Aluminium Works</title>
+    <title>Villa &amp; Apartman Görselleri — Taner Yolcu Aluminium Works</title>
     <meta
       name="description"
-      content="Villa projelerinden dış cephe ve iç mekân görselleri — yüksek kemerli, karolajlı ve taş ev uygulamalarında sürme doğrama detayları. Taner Yolcu Aluminium Works."
+      content="Villa ve apartman projelerinden dış cephe ve iç mekân görselleri — kemerli, karolajlı ve taş ev uygulamalarında alüminyum doğrama detayları. Taner Yolcu Aluminium Works."
     />
     <!-- Critical: avoid unstyled flash while the bundled CSS loads.
          The page stylesheet reveals <body> again via a class rule. -->
@@ -35,7 +35,7 @@
       <a class="chrome__back" href="/"
         ><span class="chrome__back-arrow">←</span> Geri</a
       >
-      <span class="chrome__tag">Villa Görselleri</span>
+      <span class="chrome__tag">Villa &amp; Apartman Görselleri</span>
     </header>
 
     <main>
@@ -58,15 +58,17 @@
             <span class="eyebrow__dot"></span>Render galerisi
           </p>
           <h1 class="hero__title">
-            <span class="hero__line"><span data-split>Villa</span></span>
+            <span class="hero__line"
+              ><span data-split>Villa &amp; Apartman</span></span
+            >
             <span class="hero__line hero__line--serif"
               ><span data-split>Görselleri</span></span
             >
           </h1>
           <p class="hero__lede" data-stagger>
-            Tamamlanmış villa projelerinden dış cephe, iç mekân ve doğrama
-            detayları. Kemerli karolajlı sürme sistemlerin gerçek ölçekte
-            nasıl durduğunu görün.
+            Tamamlanmış villa ve apartman projelerinden dış cephe, iç mekân
+            ve doğrama detayları. Kemerli karolajlı sistemlerin gerçek
+            ölçekte nasıl durduğunu görün.
           </p>
           <div class="hero__stats" data-stagger>
             <div class="hero__stat">
@@ -81,7 +83,19 @@
         </div>
       </section>
 
-      <!-- ===== Masonry sections ===== -->
+      <!-- ===== Filter + masonry sections ===== -->
+      <nav class="filters" id="filters" aria-label="Görsel türü filtresi">
+        <button class="filters__chip is-active" type="button" data-filter="all">
+          Tümü <span class="filters__n" data-filter-count="all"></span>
+        </button>
+        <button class="filters__chip" type="button" data-filter="villa">
+          Villa <span class="filters__n" data-filter-count="villa"></span>
+        </button>
+        <button class="filters__chip" type="button" data-filter="apartman">
+          Apartman <span class="filters__n" data-filter-count="apartman"></span>
+        </button>
+      </nav>
+
       <section class="wall" id="wall"></section>
 
       <!-- ===== Outro ===== -->
@@ -98,7 +112,7 @@
         </div>
         <footer class="footer">
           <span>© Taner Yolcu Cons. Ltd. — Aluworks</span>
-          <span>Villa Görselleri</span>
+          <span>Villa &amp; Apartman Görselleri</span>
         </footer>
       </section>
     </main>

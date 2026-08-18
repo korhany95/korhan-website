@@ -1,8 +1,7 @@
 /* =========================================================================
-   Villa Görselleri — render galerisi
-   Fullscreen hero video, three captioned masonry sections (yüksek kemerli
-   ve karolajlı, karolaj doğramalı taş ev, kemerli & karolajlı detaylar) and
-   a lightbox that walks the whole wall in one continuous list.
+   Villa & Apartman Görselleri — render galerisi
+   Fullscreen hero video, a villa/apartman filter over captionless masonry
+   sections, and a lightbox that walks whatever the filter left visible.
    ========================================================================= */
 
 import './villa.css'
@@ -32,73 +31,127 @@ const VILLA_BASE = '/media/Villa Görselleri'
 const SURME_BASE = '/media/Sürme Doğramalar'
 const HERO_VIDEO = `${VILLA_BASE}/hero.mp4`
 
+/* Zip'lerden gelen setler numaralandırılmış dosyalar: 01.webp … NN.webp */
+const seq = (n) => Array.from({ length: n }, (_, i) => `${String(i + 1).padStart(2, '0')}.webp`)
+
 const SECTIONS = [
   {
     id: 'set4k',
+    cat: 'villa',
     title: 'Yüksek Kemerli ve <em>Karolajlı</em>',
-    badge: 'Yüksek Kemerli',
     base: `${VILLA_BASE}/4k`,
     files: [
-      ['03_day_exterior.webp', 'Gündüz Cephesi'],
-      ['02_night_exterior.webp', 'Gece Cephesi'],
-      ['10_pool_view.webp', 'Havuz Manzarası'],
-      ['01_hallway_interior.webp', 'Giriş Holü'],
-      ['05_living_room.webp', 'Salon'],
-      ['04_kitchen.webp', 'Mutfak'],
-      ['06_bedroom_view.webp', 'Yatak Odası'],
-      ['09_staircase.webp', 'Merdiven'],
-      ['08_bathroom.webp', 'Banyo'],
-      ['07_garden_detail.webp', 'Bahçe Detayı'],
+      '03_day_exterior.webp',
+      '02_night_exterior.webp',
+      '10_pool_view.webp',
+      '01_hallway_interior.webp',
+      '05_living_room.webp',
+      '04_kitchen.webp',
+      '06_bedroom_view.webp',
+      '09_staircase.webp',
+      '08_bathroom.webp',
+      '07_garden_detail.webp',
     ],
   },
   {
-    id: 'villa',
+    id: 'tasev',
+    cat: 'villa',
     title: 'Karolaj Doğramalı <em>Taş Ev</em>',
-    badge: 'Taş Ev',
     base: `${SURME_BASE}/Villa`,
     files: [
-      ['Birds Eye shot.webp', 'Kuşbakışı'],
-      ['On.webp', 'Ön Cephe'],
-      ['On ve Balkon.webp', 'Ön Cephe ve Balkon'],
-      ['Evin Onu.webp', 'Evin Önü'],
-      ['Arka Bahce.webp', 'Arka Bahçe'],
-      ['arka bahce 2.webp', 'Arka Bahçe II'],
-      ['agacli.webp', 'Ağaçlı Bahçe'],
-      ['karolaj Detay.webp', 'Karolaj Detayı'],
-      ['image_1785439405666_07976d14.webp', 'Cephe Detayı'],
-      ['Salon.webp', 'Salon'],
-      ['Mutfak.webp', 'Mutfak'],
-      ['Merdiven.webp', 'Merdiven'],
-      ['Bedroom 1.webp', 'Yatak Odası I'],
-      ['bedroom 2.webp', 'Yatak Odası II'],
+      'Birds Eye shot.webp',
+      'On.webp',
+      'On ve Balkon.webp',
+      'Evin Onu.webp',
+      'Arka Bahce.webp',
+      'arka bahce 2.webp',
+      'agacli.webp',
+      'karolaj Detay.webp',
+      'image_1785439405666_07976d14.webp',
+      'Salon.webp',
+      'Mutfak.webp',
+      'Merdiven.webp',
+      'Bedroom 1.webp',
+      'bedroom 2.webp',
     ],
   },
   {
     id: 'kemerli',
+    cat: 'villa',
     title: 'Kemerli & <em>Karolajlı</em>',
-    badge: 'Kemerli',
     base: `${SURME_BASE}/Kemerli ve Karolajlı Isı yalıtımlı (t100 seri)`,
     files: [
-      ['Kemerli Karolajlı Sürme.webp', 'Kemerli Karolajlı Sürme'],
-      ['Kemerli Karolajlı Sürme (içerden bakış).webp', 'İçerden Bakış'],
-      ['Kemerli Karolajlı Sürme İçerden bakış 2.webp', 'İçerden Bakış II'],
-      ['Kareloj Detay.webp', 'Karolaj Detayı'],
-      ['Orta Kayıt Detay.webp', 'Orta Kayıt Detayı'],
-      ['Üst ve Alt sabit, orta açılım, Karolajlı 2.webp', 'Üst-Alt Sabit, Orta Açılım'],
-      ['image_1783755579429_2b4e5e05.webp', 'Kemerli Sürme Detay'],
+      'Kemerli Karolajlı Sürme.webp',
+      'Kemerli Karolajlı Sürme (içerden bakış).webp',
+      'Kemerli Karolajlı Sürme İçerden bakış 2.webp',
+      'Kareloj Detay.webp',
+      'Orta Kayıt Detay.webp',
+      'Üst ve Alt sabit, orta açılım, Karolajlı 2.webp',
+      'image_1783755579429_2b4e5e05.webp',
     ],
+  },
+  {
+    id: 'girne',
+    cat: 'villa',
+    title: 'Girne <em>Lüks Villa</em>',
+    base: `${VILLA_BASE}/girne-luks-villa`,
+    files: seq(10),
+  },
+  {
+    id: 'mutluyaka',
+    cat: 'villa',
+    title: 'Mutluyaka <em>Taş Ev</em>',
+    base: `${VILLA_BASE}/mutluyaka-tas-ev`,
+    files: seq(10),
+  },
+  {
+    id: 'panoramik',
+    cat: 'villa',
+    title: 'Panoramik <em>Taş Villa</em>',
+    base: `${VILLA_BASE}/panoramik-villa`,
+    files: seq(8),
+  },
+  {
+    id: 'akdeniz',
+    cat: 'villa',
+    title: 'Akdeniz <em>Villası</em>',
+    base: `${VILLA_BASE}/sicakta-villa`,
+    files: seq(8),
+  },
+  {
+    id: 'yagmur',
+    cat: 'villa',
+    title: 'Yağmurda <em>Villa</em>',
+    base: `${VILLA_BASE}/yagmurda-villa`,
+    files: seq(6),
+  },
+  {
+    id: 'apt-kemerli',
+    cat: 'apartman',
+    title: 'Kemerli ve Karolaj <em>Doğramalı Apartman</em>',
+    base: `${VILLA_BASE}/apartman-kemerli-karolaj`,
+    files: seq(14),
+  },
+  {
+    id: 'apt-6katli',
+    cat: 'apartman',
+    title: '6 Katlı <em>Apartman</em>',
+    base: `${VILLA_BASE}/apartman-6-katli`,
+    files: seq(11),
   },
 ]
 
 /* -------------------------------------------------------------------------
-   Build the wall — one grid per section, one flat item list for the lightbox
+   Build the wall — one grid per section, captionless cards
    ------------------------------------------------------------------------- */
 const wall = document.getElementById('wall')
-const items = [] // { el, src, label, badge }
+const items = []  // { el, src, cat } — every card, in DOM order
+const groups = [] // { cat, head, grid, items }
 
 for (const section of SECTIONS) {
   const head = document.createElement('header')
   head.className = 'wall__head'
+  head.dataset.cat = section.cat
   head.innerHTML = `
     <h2 class="wall__title">${section.title}</h2>
     <span class="wall__count">${section.files.length} görsel</span>`
@@ -106,27 +159,69 @@ for (const section of SECTIONS) {
 
   const grid = document.createElement('div')
   grid.className = 'wall__grid'
+  grid.dataset.cat = section.cat
   wall.appendChild(grid)
 
-  for (const [file, label] of section.files) {
+  const groupItems = []
+  for (const file of section.files) {
     const src = encPath(`${section.base}/${file}`)
 
     const card = document.createElement('button')
     card.type = 'button'
     card.className = 'card'
+    card.setAttribute('aria-label', 'Görseli büyüt')
     card.innerHTML = `
       <span class="card__media">
-        <img class="card__img" src="${src}" alt="${label}" loading="lazy" decoding="async" />
-      </span>
-      <span class="card__meta">
-        <span class="card__serie">${label}</span>
+        <img class="card__img" src="${src}" alt="" loading="lazy" decoding="async" />
       </span>`
     grid.appendChild(card)
-    items.push({ el: card, src, label, badge: section.badge })
+
+    const item = { el: card, src, cat: section.cat }
+    items.push(item)
+    groupItems.push(item)
   }
+
+  groups.push({ cat: section.cat, head, grid, items: groupItems })
 }
 
-document.querySelector('[data-total-count]').textContent = items.length
+/* -------------------------------------------------------------------------
+   Villa / Apartman filter
+   ------------------------------------------------------------------------- */
+const totalCount = document.querySelector('[data-total-count]')
+const chips = [...document.querySelectorAll('.filters__chip')]
+const counts = {
+  all: items.length,
+  villa: items.filter((it) => it.cat === 'villa').length,
+  apartman: items.filter((it) => it.cat === 'apartman').length,
+}
+document.querySelectorAll('[data-filter-count]').forEach((el) => {
+  el.textContent = counts[el.dataset.filterCount]
+})
+
+let visible = items.slice()
+
+function applyFilter(cat) {
+  visible = []
+  for (const group of groups) {
+    const on = cat === 'all' || group.cat === cat
+    group.head.hidden = !on
+    group.grid.hidden = !on
+    if (on) visible.push(...group.items)
+  }
+  totalCount.textContent = visible.length
+  chips.forEach((chip) => {
+    const active = chip.dataset.filter === cat
+    chip.classList.toggle('is-active', active)
+    chip.setAttribute('aria-pressed', active ? 'true' : 'false')
+  })
+  ScrollTrigger.refresh()
+}
+
+chips.forEach((chip) => {
+  chip.addEventListener('click', () => applyFilter(chip.dataset.filter))
+})
+
+applyFilter('all')
 
 /* -------------------------------------------------------------------------
    Smooth scroll + intro
@@ -208,11 +303,11 @@ let current = 0
 let open = false
 
 function show(i) {
-  current = (i + items.length) % items.length
-  const item = items[current]
+  current = (i + visible.length) % visible.length
+  const item = visible[current]
   lightboxImg.src = item.src
-  lightboxImg.alt = item.label
-  lightboxCap.textContent = `${item.badge} · ${item.label} · ${current + 1} / ${items.length}`
+  lightboxImg.alt = ''
+  lightboxCap.textContent = `${current + 1} / ${visible.length}`
   if (!prefersReducedMotion) {
     gsap.fromTo('.lightbox__figure', { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 0.45, ease: 'power3.out' })
   }
@@ -233,8 +328,8 @@ function closeLightbox() {
   if (lenis) lenis.start()
 }
 
-items.forEach((item, i) => {
-  item.el.addEventListener('click', () => openLightbox(i))
+items.forEach((item) => {
+  item.el.addEventListener('click', () => openLightbox(visible.indexOf(item)))
 })
 
 document.getElementById('lightboxClose').addEventListener('click', closeLightbox)

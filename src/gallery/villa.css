@@ -178,6 +178,9 @@ img {
   display: block;
   overflow: hidden;
   padding-bottom: 0.08em;
+  /* every .char is an inline-block, so without this the browser happily
+     breaks a word between two letters ("APARTMA / N") */
+  white-space: nowrap;
 }
 .hero__line--serif {
   font-family: var(--font-serif);
@@ -538,6 +541,11 @@ img {
 }
 
 @media (max-width: 640px) {
+  /* the title lines can no longer wrap, so ease the size down on phones
+     instead — this matches the clamp exactly at the 640px breakpoint */
+  .hero__title {
+    font-size: clamp(2.1rem, 8.6vw, 3.2rem);
+  }
   .wall__grid {
     columns: 1;
   }

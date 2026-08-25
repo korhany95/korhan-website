@@ -139,6 +139,13 @@ const SECTIONS = [
     base: `${VILLA_BASE}/apartman-6-katli`,
     files: seq(11),
   },
+  {
+    id: 'apt-cepheli',
+    cat: 'apartman',
+    title: 'Cepheli <em>Apartman</em>',
+    base: `${VILLA_BASE}/apartman-cepheli`,
+    files: seq(13),
+  },
 ]
 
 /* -------------------------------------------------------------------------
